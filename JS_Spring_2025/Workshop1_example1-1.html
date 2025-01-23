@@ -1,0 +1,141 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Workshop 1</title>
+		<!-- script tag is where Javascript goes to -->
+		<script>
+			for(var i = 0; i < 400; i++) {
+				console.log("This round is " + i);
+			}
+
+			// 3. Contitionals
+
+			var x = -10;
+			var order = 'Beer';
+			if (x > 50) {
+				document.write("<h2><i>He’s over 50</h2></i>");
+				console.log("He’s over 50" );
+			} else if (x <= 50 && x > 30) {
+				document.write("<strong>Middle aged man</strong>, who ordered some "+order);
+				console.log("Middle aged man, who ordered some "+order);
+			} else if (x <= 30 && x >= 18) {
+				document.write("<i>Young man</i>, who ordered some "+order);
+				console.log("Young man, who ordered some "+order);
+			} else if (x < 0) {
+				document.write("You can't have "+order+", because you don't even exist!");
+				console.log("You can't have "+order+", because you don't even exist!");
+			} else if (x < 18 && x > 0) {
+				document.write("It seems you're bit underaged.");
+				console.log("It seems you're bit underaged.");
+			}
+
+			// 4. Loops
+			var arr = [];
+			for (var i=0; i<15; i++) {
+				var random_number = Math.floor(Math.random() * 100) + 1;
+				arr.push(random_number);
+				console.log(random_number);
+			}
+			console.log(arr);
+			document.write("<p>"+arr+"</p>");
+
+			// 5. Functions walkthrough
+			// Returns true if age is over 18, otherwise returns false
+			function areYouOldEnough(age) {
+				if (age < 18) {
+					console.log(false);
+					console.log("You are not old enough! (You are "+age+" years old. Under 18 year olds are forbidden!)");
+					return false;
+				} else {
+				console.log(true);
+				alert("Welcome to the site! You are old enough ("+age+")");
+				return true;
+				}
+			}
+
+			// 6. Objects
+			// Define an object to hold data for a person
+			var person = {
+				firstName:"John",
+				lastName:"Doe",
+				age:50,
+				eyeColor:"blue",
+				address:"Paratiisitie 13",
+				telephone:"050-123456789"
+			};
+
+			var person2 = {
+				firstName:"Jane",
+				lastName:"Doe",
+				age:45,
+				eyeColor:"hazel",
+				address:"Paratiisitie 13",
+				telephone:"040-123456789"
+			};
+
+			var person3 = {
+				firstName:"Urho",
+				lastName:"Kekkonen",
+				age:80,
+				eyeColor:"green",
+				address:"Presidentinlinna 1",
+				telephone:"045-123456789"
+			};
+
+			var person4 = {
+				firstName:"Kustaa",
+				lastName:"Vaasa",
+				age:19,
+				eyeColor:"brown",
+				address:"Kungsvägen 13",
+				telephone:"041-123456789"
+			};
+
+			const printInfo = function () {
+    			console.log(person);
+			};
+
+			console.log(person.age);
+
+			var arr = [person, person2, person3, person4];
+
+			for (var i = 0; i < arr.length; i++) {
+				console.log(arr[i].firstName+" "+arr[i].lastName);
+			};
+
+			// 1. Dog's age
+			function dogAge(age) {
+				return age*7;
+			}
+
+			// 2. Debugging a script
+			var i = 5;
+			var j = 10;
+			var k = 25;
+			var l = "Joe";
+
+			if (i < j) {
+				console.log("i");
+			} else if (j > k) { 
+				console.log("k");
+			} else {
+				console.log("j");
+			}
+
+			var arr = [3, 5, 7];
+			for (var i = 0; i < arr.length; ++i) {
+				console.log(arr[i]);
+			}
+			
+		</script>
+
+	</head>
+
+	<body>
+		<h1>Welcome to example page</h1>
+		<p> Lorem ipsum dolorem...   </p>
+
+	</body>
+
+</html>
