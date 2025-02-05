@@ -5,7 +5,88 @@
         <title>Workshop 3</title>
         <link rel="stylesheet" href="css/styles.css">
         <script>
-            <!-- JavaScript goes here -->
+
+            // Exercise 1
+            var showTable = function() {
+                var originalTable = document.getElementById("example");
+                var newTable = originalTable.cloneNode(true);
+    
+                newTable.id = "cloned-table";
+
+                document.body.appendChild(newTable);
+            };
+
+            function showLocation() {
+                if ("geolocation" in navigator) {
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            let latitude = position.coords.latitude;
+                            let longitude = position.coords.longitude;
+                            
+                            let locationText = `Latitude: ${latitude}, Longitude: ${longitude}`;
+
+                            console.log(locationText);
+                            document.body.insertAdjacentHTML("beforeend", `<p>${locationText}</p>`);
+                        },
+                        (error) => {
+                            console.log("Error getting location:", error.message);
+                            document.body.insertAdjacentHTML("beforeend", `<p>Error: ${error.message}</p>`);
+                        }
+                    );
+                } else {
+                    console.log("Geolocation is not supported by this browser.");
+                    document.body.insertAdjacentHTML("beforeend", "<p>Geolocation is not supported by this browser.</p>");
+                }
+            }
+
+            // Exercise 3
+
+            function showMessage() {
+                var message = document.getElementById('textdata');
+                message.textContent = 'Please fill in the form with proper data.';
+                message.style.display = 'block';
+                message.style.color = 'grey';
+                message.style.fontSize = '16px';
+                message.style.backgroundColor = '#CCCCFF';
+            }
+            
+            let count = 0
+            function countKeys() {
+                count++;
+                var message = document.getElementById('charcount');
+                message.innerHTML = 'Keypresses: ' + count + '<br><br>';
+            }
+
+            function emptyForm() {
+                if (document.getElementById("textdata").value == 0) {
+                    alert("You cannot leave the message empty!")
+                }
+            }
+
+            // Exercise 4
+
+            function showCoordinates() {
+
+                const div = document.getElementById('coordinates');
+
+                const coordsHeading = document.createElement('h2');
+                coordsHeading.id = 'coords';
+
+                div.insertAdjacentElement('afterend', coordsHeading);
+
+                div.onmousemove = function(event) {
+
+                    const x = event.offsetX;
+                    const y = event.offsetY;
+
+                    coordsHeading.textContent = `X: ${x}, Y: ${y}`;
+                }; 
+            }
+
+            window.onload = function() {
+                showCoordinates();
+            };
+
         </script>
     </head>
     <body class="ws3">
@@ -16,9 +97,9 @@
         <h2>Exercise 1</h2>
         <p>Below you will see three buttons. Edit the source code and add an onClick-events to these buttons.</p>
         <p>
-          <button>Click me</button>
-          <button>Show table</button>
-          <button>Geolocation</button>
+          <button onclick="alert('You clicked me! ' + Date())">Click me</button>
+          <button onclick="showTable()">Show table</button>
+          <button onclick="showLocation()">Geolocation</button>
         </p>
 
         <ol>
@@ -66,7 +147,7 @@
             <li>The last button should check Geolocation of the user, and output it to the console and to the page. Note: Some browsers might not allow you to do this. Try different browsers if you get errors.</li>
         </ol>
         <hr/>
-        <h2>Exercise 2</h2>
+        <h2 onMouseOver="console.log('Stepped over my a mouse!');" onMouseLeave="alert('Bye bye mouse!');">Exercise 2</h2>
         <ul>
             <li>Add an&nbsp;onMouseOver event on the&nbsp;Heading "Exercise 2" of this page.&nbsp;It should&nbsp;fire when the users mouse is moved 
         over&nbsp;it. Output "Stepped over my a mouse!" on the console.</li>
@@ -81,9 +162,9 @@
           <li>When the form button is clicked, check if the textarea is empty. Notify the user with appropriate message. HINT: You can access the Textarea using the following command:   <i>document.getElementById("textdata").value</i>. We will study the forms deeper in Workshops 4 and 5.</li>
         </ul>
         <form>
-            <textarea id="textdata"></textarea><br>
+            <textarea id="textdata" onfocus="showMessage()" onkeydown="countKeys()"></textarea><br>
             <span id="charcount"></span>
-            <button>Send me</button>
+            <button onclick="emptyForm()">Send me</button>
         </form>
         <hr/>
         <h2>Exercise 4</h2>
