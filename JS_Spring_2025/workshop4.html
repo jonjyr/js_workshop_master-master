@@ -6,7 +6,7 @@
 		<link rel="stylesheet" href="css/styles.css">
 	</head>
 	<body class="ws4">
-		<h1>Workshop 4: DOM Scripting</h1>
+		<h1 id="h4">Workshop 4: DOM Scripting</h1>
 		<hr />
 		<p>In this exercise we will practice the art of DOM Scripting with JavaScript. Use the lecture-material as a reference guide side by side these exercises. It might also be a good idea to save the lines of code you write during the exercises for later use. </p>
 
@@ -15,8 +15,8 @@
 		<p>&nbsp;Below you will see three buttons. Edit the source code and add an onClick-events to these buttons. Use Developer Console to find the </p>
 		<p>
 		  <button onclick="changeHeading();">Button 1</button>
-		  <button onclick="secondButton">Button 2</button>
-		  <button onclick="">Button 3</button>
+		  <button onclick="secondButton()">Button 2</button>
+		  <button onclick="thirdButton()">Button 3</button>
 		</p>
 
 		<ul>
@@ -24,11 +24,13 @@
 			<li> The second button should run a function, which will modify the style of the &quot;Exercise 2&quot; heading on this page. JavaScript should change at least the font size, style and color and the background color</li>
 			<li>The third button should append the following text paragraph after the <strong>4th paragraph tag &lt;p&gt;</strong> on the page (without overwriting the current content). Change the background of the entire page as well. Note: The Lorem ipsum text should be in italics. It should also add a logo image of some sort after the text.<br>
 			<br>
-			<strong id="lorem"><em>&quot;Lorem ipsum</em></strong><em> dolor sit amet, consectetuer   adipiscing elit. Sed posuere interdum sem. Quisque ligula eros   ullamcorper quis, lacinia quis facilisis sed sapien. Mauris varius diam   vitae arcu. Sed arcu lectus auctor vitae, consectetuer et venenatis eget   velit. &quot;</em></li>
+			<div id="lorem2">
+				<strong id="lorem"><em>&quot;Lorem ipsum</em></strong><em> dolor sit amet, consectetuer   adipiscing elit. Sed posuere interdum sem. Quisque ligula eros   ullamcorper quis, lacinia quis facilisis sed sapien. Mauris varius diam   vitae arcu. Sed arcu lectus auctor vitae, consectetuer et venenatis eget   velit. &quot;</em></li>
+			</div>
 		</ul>
 		<hr/>
-		<h2>Exercise 2: DOM Traversing using ID's and classes</h2>
-		<p class="surprise">Add onchange -events to following checkboxes.</p>
+		<h2 id="e2">Exercise 2: DOM Traversing using ID's and classes</h2>
+		<p class="surprise" id="p4">Add onchange -events to following checkboxes.</p>
 		<p>
 			<label>
 				<input onchange="hide()" name="CheckboxGroup1" type="checkbox" id="CheckboxGroup1_0" title="Actions" value="1">
@@ -41,7 +43,7 @@
 			</label>
 			<br>
 			<label>
-				<input type="checkbox" name="CheckboxGroup1" value="3" id="CheckboxGroup1_2"> 
+				<input onchange="enlarge()" type="checkbox" name="CheckboxGroup1" value="3" id="CheckboxGroup1_2"> 
 				<span id="surpise">Surprise</span>
 			</label>
 		</p>
@@ -60,7 +62,7 @@
 				<li>When you have accomplished the above, change the image (id=&quot;carimage&quot;) below based on the users choice on the pulldown menu below. Find appropriate images from the web.
 			</ul>
 		  <p>Select a new car from the list.</p>
-		  <select name="mySelect" id="mySelect" onchange="">
+		  <select name="mySelect" id="mySelect" onchange="carSelected()">
 			<option value="BMW">BMW         
 			<option value="Audi">Audi
 			<option value="Mercedes">Mercedes
@@ -68,7 +70,7 @@
 		  </select>
 		  <br>
 		  <br>
-		<img alt="" onmouseover="" onmouseout="" style="left: 0px; opacity: 1;" src="http://cdn.bmwblog.com/wp-content/uploads/2015/11/BMW-2-Series-Gran-Coupe-Rendering.jpg" width="400" id="carimage"/>
+		<img alt="" onmouseover="carBorder()" onmouseout="nocarBorder()" style="left: 0px; opacity: 1;" src="http://cdn.bmwblog.com/wp-content/uploads/2015/11/BMW-2-Series-Gran-Coupe-Rendering.jpg" width="400" id="carimage"/>
 		<hr/>
 		<h2>Exercise 4: Moving things around</h2>
 		<ul>
@@ -148,7 +150,155 @@
 			</li>
 			<li dir="ltr">How would you replace the contents only on the ones with the word &lsquo;Select&rsquo; in them?</li>
 		</ul>
+		<script>
+			// Exercise 1
+
+			function changeHeading() {
+				let h4 = document.getElementById("h4");
+				h4.innerHTML = "Modified Heading!";
+			}
+
+			function secondButton() {
+				let e2 = document.getElementById("e2")
+				e2.style.fontSize = "2em"
+				e2.style.fontStyle = "italic"
+				e2.style.color = "green"
+				e2.style.backgroundColor = "pink"
+			}
+
+			function thirdButton() {
+				let p4 = document.getElementById("p4");
+				let lorem = document.getElementById("lorem2");
+				let copyLorem = lorem.cloneNode(true);
+				document.body.style.backgroundColor = "#78FCC5";
+				p4.insertAdjacentElement('afterend', copyLorem);
+				let kuva = new Image(100,100);
+				kuva.src = 'img/js-logo.png';
+				copyLorem.insertAdjacentElement('afterend', kuva);
+			}
+
+			// Exercise 2
+
+			function hide() {
+				let me = document.getElementById("me")
+				me.style.display = "none"
+			}
+			
+			function show() {
+				let me = document.getElementById("me")
+				me.style.display = "block"
+			}
+
+			function enlarge() {
+				let surprise = document.getElementsByClassName("surprise")
+				for (let i = 0; i < surprise.length; i++) {
+					surprise[i].style.fontSize = "20px"
+				}
+			}
+
+			// Exercise 3
+
+			function carSelected() {
+				let auto = document.getElementById("mySelect").value;
+				let carimage = document.getElementById("carimage");
+				alert("You selected: " + auto);
+
+				if (auto == "BMW") {
+					carimage.src = 'https://upload.wikimedia.org/wikipedia/commons/4/4c/Old_BMW_%283375843478%29.jpg';
+				} else if (auto == "Audi") {
+					carimage.src = 'https://upload.wikimedia.org/wikipedia/commons/4/48/Audi_100_C1_Coup%C3%A9_Front_%282008-07-12%29_ret.JPG';
+				} else if (auto == "Mercedes") {
+					carimage.src = 'https://upload.wikimedia.org/wikipedia/commons/0/00/Mercedes-Benz_190_D_EX-80-01_pic7.JPG';
+				} else {
+					carimage.src = 'https://upload.wikimedia.org/wikipedia/commons/1/1f/Volvo_740GLT_Kombi_front_20080130.jpg';
+				}
+			}
+
+			function carBorder() {
+				let img = document.getElementById("carimage");
+				img.style.border = "5px solid red";
+			}
+
+			function nocarBorder() {
+				let img = document.getElementById("carimage");
+				img.style.border = "0px";
+			}
+
+			// Exercise 4
+
+			function changePosition() {
+				let carimage = document.getElementById("carimage");
+				carimage.style.position = "relative";
+				carimage.style.left = "200px";
+				carimage.style.top = "500px";
+			}
+
+			
+			let direction = 1;
+			let speed = 100
+			function doMove() {
+				let carimage = document.getElementById("carimage");
+				carimage.style.position = 'relative';
+				var leftVal = parseInt(carimage.style.left);
+				let newLeftVal = leftVal + (speed * direction);
+
+				let screenWidth = window.innerWidth;
+				let imageWidth = carimage.width;
+
+				if (newLeftVal + imageWidth >= screenWidth || newLeftVal <= 0) {
+					direction *= -1;
+				}
+
+				carimage.style.left = newLeftVal + 'px';
+			}
+
+			let opacity = 1
+			let ctr = -1
+			function fadeOut() {
+				let carimage = document.getElementById("carimage");
+				opacity += ctr * 0.1
+				if (opacity <= 0) {
+					opacity = 0;
+					ctr = 1;
+				} else if (opacity >= 1) {
+					opacity = 1
+					ctr = -1
+				}
+				carimage.style.opacity = opacity
+			}
+
+			function remove() {
+				let carimage = document.getElementById("carimage");
+				carimage.style.display = "none"
+			}
+
+			// Exercise 5
+
+			function insertRows() {
+				const table = document.getElementById("data").getElementsByTagName('tbody')[0];
+
+				const newRow = table.insertRow();
+
+				const name = document.getElementById("textfield").value;
+				const position = document.getElementById("textfield2").value;
+				const salary = document.getElementById("textfield3").value;
+
+				const cell1 = newRow.insertCell(0);
+				const cell2 = newRow.insertCell(1);
+				const cell3 = newRow.insertCell(2);
+
+				cell1.innerHTML = name;
+				cell2.innerHTML = position;
+				cell3.innerHTML = salary;
+
+				document.getElementById("textfield").value = "";
+				document.getElementById("textfield2").value = "";
+				document.getElementById("textfield3").value = "";
+			}
+
+		</script>
 	</body>
 </html>
+
 
 
