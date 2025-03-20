@@ -114,8 +114,98 @@
 			<li><a href="#">News heading 3</a></li>
 		</ul>
 		<input type="button" name="Fetch3" id="Fetch3b" value="Load YAHOO newsfeed" onclick="loadAndParseNews('https://www.yahoo.com/news/rss/')">
-		<input type="button" name="Fetch3" id="Fetch3c" value="Load Iltalehti Newsfeed" onclick="loadAndParseNews('http://www.iltalehti.fi/rss/uutiset.xml')">
+		<input type="button" name="Fetch3" id="Fetch3c" value="Load Iltalehti Newsfeed" onclick="loadAndParseNews()">
 		<div id="newsfeed">
 		</div>
+		<script>
+			
+			// Exercise 1
+
+			function parseData () {
+				let quote = document.getElementsByTagName("quote")
+				let author = document.getElementsByTagName("author")
+
+				for (let i=0; i < quote.length; i++) {
+					console.log(quote[i].innerHTML)
+					console.log(author[i].innerHTML)
+				}
+
+			}
+
+			// Exercise 2
+
+			function loadJSONFile() {
+					let xmlhttp = new XMLHttpRequest();
+
+					xmlhttp.open("GET", "https://www.omdbapi.com/?s=star+wars&apikey=cbbc6750", true);
+					xmlhttp.send();
+
+					xmlhttp.onreadystatechange = function() {
+							if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+									document.getElementById("quotes").innerHTML = xmlhttp.responseText;
+							}
+					}
+			}
+
+			// Exercise 3
+
+			function loadAndParseJSON() {
+				let xmlhttp = new XMLHttpRequest();
+
+					xmlhttp.open("GET", "https://www.omdbapi.com/?s=star+wars&apikey=cbbc6750", true);
+					xmlhttp.send();
+
+					xmlhttp.onreadystatechange = function() {
+							if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+								let jsonData = JSON.parse(xmlhttp.responseText);
+								let searchData = jsonData.Search;
+								
+								for (let i=0; i < searchData.length; i++) {
+									let title = searchData[i].Title;
+									let poster = searchData[i].Poster;
+									let tr = document.createElement("tr")
+									
+									tr.innerHTML = "<td>" + title + '</td><td><img src="' + poster + '"></td>';
+									document.getElementById("tabledata").appendChild(tr);
+								}
+							}
+					}
+			}
+
+			// Exercise 4
+
+			function loadAndParseNews() {
+				let xmlhttp = new XMLHttpRequest();
+				
+				xmlhttp.open("GET", "http://www.iltalehti.fi/rss/uutiset.xml", true);
+				xmlhttp.send();
+				
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+						let xmlDoc = xmlhttp.responseXML;
+						let items = xmlDoc.getElementsByTagName("item");
+						let newsHTML = "";
+
+						for (let i = 0; i < items.length; i++) {
+							let title = items[i].getElementsByTagName("title")[0].textContent;
+							let link = items[i].getElementsByTagName("link")[0].textContent;
+							let pubDate = items[i].getElementsByTagName("pubDate")[0].textContent;
+							let description = items[i].getElementsByTagName("description")[0].textContent;
+
+							newsHTML += `
+								<div class="news-item">
+									<h3><a href="${link}" target="_blank">${title}</a></h3>
+									<p><strong>Published on:</strong> ${pubDate}</p>
+									<p>${description}</p>
+								</div>
+							`;
+						}
+
+						document.getElementById("newsfeed").innerHTML = newsHTML;
+					}
+				}
+			}
+
+		</script>
 	</body>
 </html>
