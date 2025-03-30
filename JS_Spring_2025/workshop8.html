@@ -68,7 +68,176 @@
 		</select>
 		<p>Or type in a search query: <input id="citysearch" /><button id="search">Search</button></p>
 		<div id="weatherdata">Weatherdata goes here.</div>
+		<script>
 
+			// Exercise 1
+
+			var text = '{ "employees" : [' +
+				'{ "firstName":"John" , "lastName":"Doe" , "monthlySalary":"4550" , "jobRole":"Data-analyst" },' +
+				'{ "firstName":"Anna" , "lastName":"Smith" , "monthlySalary":"5400" , "jobRole":"Senior developer" },' +
+				'{ "firstName":"Peter" , "lastName":"Jones" , "monthlySalary":"2919" , "jobRole":"Junior developer" } ]}';
+
+			document.getElementsByTagName("button")[0].addEventListener("click", function() {
+				var jsondata = document.getElementById("jsondata");
+				var parsedData = JSON.parse(text);
+				var employees = parsedData["employees"];
+				
+				jsondata.innerHTML = "";
+				for (let i = 0; i < employees.length; i++) {
+					jsondata.innerHTML += employees[i]["firstName"] + " " + employees[i]["lastName"] + "<br>";
+				}
+			});
+
+			document.getElementsByTagName("button")[1].addEventListener("click", function() {
+				var jsondata = document.getElementById("jsondata");
+				var parsedData = JSON.parse(text);
+				var employees = parsedData["employees"];
+				var table = document.createElement("table");
+				var header = document.createElement("tr");
+				
+				jsondata.innerHTML = "";
+				header.innerHTML = "<th>First Name</th><th>Last Name</th><th>Salary per Month</th><th>Job Role</th>";
+				table.appendChild(header);
+				jsondata.appendChild(table);
+				for (let i = 0; i < employees.length; i++) {
+					let row = document.createElement("tr");
+					row.innerHTML = "<td>" + employees[i]["firstName"] + "</td><td>" + employees[i]["lastName"] + "</td><td>" + employees[i]["monthlySalary"] + "</td><td>" + employees[i]["jobRole"] + "</td>";
+					table.appendChild(row);
+				}
+			});
+
+			// Exercise 2
+
+			document.getElementsByTagName("button")[2].addEventListener("click", function() {
+				let xmlhttp = new XMLHttpRequest();
+
+				xmlhttp.open("GET", "http://www.omdbapi.com/?s=star+wars&apikey=cbbc6750", true);
+				xmlhttp.send();
+
+				xmlhttp.onreadystatechange = function() {
+					if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+							document.getElementById("rawdata").innerHTML = xmlhttp.responseText;
+					}
+				}
+			});
+
+			document.getElementsByTagName("button")[3].addEventListener("click", function() {
+				let xmlhttp = new XMLHttpRequest();
+
+				xmlhttp.open("GET", "http://www.omdbapi.com/?s=star+wars&apikey=cbbc6750", true);
+				xmlhttp.send();
+
+				xmlhttp.onreadystatechange = function() {
+					if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+						let rawdata = document.getElementById("rawdata");
+						let jsonData = JSON.parse(xmlhttp.responseText);
+						let searchData = jsonData.Search;
+						var table = document.createElement("table");
+						var header = document.createElement("tr");
+
+
+						header.innerHTML = "<th>Title</th><th>Year</th><th>IMDB id</th><th>Type</th><th>Poster</th>";
+						table.appendChild(header);
+						rawdata.innerHTML = "";
+						rawdata.appendChild(table);
+
+						
+						for (let i=0; i < searchData.length; i++) {
+							let title = searchData[i].Title;
+							let year = searchData[i].Year;
+							let imdbID = searchData[i].imdbID;
+							let type = searchData[i].Type;
+							let poster = searchData[i].Poster;
+							let tr = document.createElement("tr");
+							
+							tr.innerHTML = "<td>" + title + "</td><td>" + year + "</td><td>" + imdbID + "</td><td>" + type + '</td><td><img src="' + poster + '"></td>';
+							table.appendChild(tr);
+						}
+					}
+				}
+			});
+
+			// Exercise 3
+
+			document.getElementsByTagName("button")[4].addEventListener("click", function() {
+				let xmlhttp = new XMLHttpRequest();
+
+				xmlhttp.open("GET", "https://api.openweathermap.org/data/2.5/weather?q=Jämsä&units=metric&appid=9e80d79b814e367e55fa39743716173d", true);
+				xmlhttp.send();
+
+				xmlhttp.onreadystatechange = function() {
+					if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+						let jsonData = JSON.parse(xmlhttp.responseText);
+						let temperature = jsonData.main.temp;
+						let clouds = jsonData.weather["0"].description;
+						let humidity = jsonData.main.humidity;
+						let dataDiv = document.getElementById("weatherdata");
+
+						dataDiv.innerHTML = "Jämsä<br><br>Temperature: " + temperature + "°C<br>Clouds: " + clouds + "<br>Humidity: " + humidity + "%";
+					}
+				}
+			});
+
+			document.getElementById("city").addEventListener("change", function() {
+				let city = document.getElementById("city").value;
+				let xmlhttp = new XMLHttpRequest();
+
+				xmlhttp.open("GET", "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&appid=9e80d79b814e367e55fa39743716173d", true);
+				xmlhttp.send();
+
+				xmlhttp.onreadystatechange = function() {
+					if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+						let jsonData = JSON.parse(xmlhttp.responseText);
+						let temperature = jsonData.main.temp;
+						let clouds = jsonData.weather["0"].description;
+						let humidity = jsonData.main.humidity;
+						let dataDiv = document.getElementById("weatherdata");
+
+						dataDiv.innerHTML = city + "<br><br>Temperature: " + temperature + "°C<br>Clouds: " + clouds + "<br>Humidity: " + humidity + "%";
+					}
+				}
+				
+			});
+
+			var error = document.createElement("span");
+
+			error.id = "error"
+			error.style.color = "red";
+			error.innerHTML = " Invalid city name.";
+			error.style.visibility = "hidden";
+
+			document.getElementById("search").insertAdjacentElement('afterend', error);
+
+			document.getElementById("search").addEventListener("click", function() {
+				let city = document.getElementById("citysearch").value;
+				let xmlhttp = new XMLHttpRequest();
+
+				xmlhttp.open("GET", "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&appid=9e80d79b814e367e55fa39743716173d", true);
+				xmlhttp.send();
+
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState == 4) {
+						let jsonData = JSON.parse(xmlhttp.responseText);
+						let input = document.getElementById("citysearch");
+
+						if (jsonData.cod == 404) {
+							input.style.border = "solid 1px red";
+							error.style.visibility = "visible";
+						} else if (xmlhttp.status == 200) {
+							let temperature = jsonData.main.temp;
+							let clouds = jsonData.weather["0"].description;
+							let humidity = jsonData.main.humidity;
+							let name = jsonData.name;
+							let country = jsonData.sys.country;
+							let dataDiv = document.getElementById("weatherdata");
+
+							dataDiv.innerHTML = name + ", " + country + "<br><br>Temperature: " + temperature + "°C<br>Clouds: " + clouds + "<br>Humidity: " + humidity + "%";
+							input.style.border = "solid 1px black";
+							error.style.visibility = "hidden";
+						}
+					}
+				}
+			});
+		</script>
 	</body>
 </html>
-
